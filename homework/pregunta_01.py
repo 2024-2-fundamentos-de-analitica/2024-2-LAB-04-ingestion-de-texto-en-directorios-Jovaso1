@@ -4,7 +4,9 @@
 """
 Escriba el codigo que ejecute la accion solicitada en cada pregunta.
 """
-
+import os
+import zipfile
+import pandas as pd
 
 def pregunta_01():
     """
@@ -71,3 +73,37 @@ def pregunta_01():
 
 
     """
+    zip_path = "files/input.zip"
+    output_folder = "files/output"
+    input_folder = "files/input"
+
+    with zipfile.ZipFile(zip_path, 'r') as zip_ref:
+        zip_ref.extractall("files")
+
+    def create_dataset(folder):
+        data = []
+        for sentiment in ["negative", "positive", "neutral"]:
+            sentiment_folder = os.path.join(folder, sentiment).replace('\\', '/')
+            for filename in os.listdir(sentiment_folder):
+                file_path = os.path.join(sentiment_folder, filename).replace('\\', '/')
+                with open(file_path, 'r', encoding='utf-8') as file:
+                    phrase = file.read().strip()
+                    data.append({"phrase": phrase, "target": sentiment})
+        return pd.DataFrame(data)
+
+    train_df = create_dataset(os.path.join(input_folder, "train").replace('\\', '/'))
+    test_df = create_dataset(os.path.join(input_folder, "test").replace('\\', '/'))
+
+    os.makedirs(output_folder, exist_ok=True)
+
+    train_df.to_csv(os.path.join(output_folder, "train_dataset.csv").replace('\\', '/'), index=False)
+    test_df.to_csv(os.path.join(output_folder, "test_dataset.csv").replace('\\', '/'), index=False)
+
+    os.makedirs(output_folder, exist_ok=True)
+
+    train_df.to_csv(os.path.join(output_folder, "train_dataset.csv"), index=False)
+    test_df.to_csv(os.path.join(output_folder, "test_dataset.csv"), index=False)
+
+    print("Archivos 'train_dataset.csv' y 'test_dataset.csv' generados en la carpeta 'output'.")
+
+pregunta_01()
