@@ -104,6 +104,6 @@ def pregunta_01():
     train_df.to_csv(os.path.join(output_folder, "train_dataset.csv"), index=False)
     test_df.to_csv(os.path.join(output_folder, "test_dataset.csv"), index=False)
 
-    print("Archivos 'train_dataset.csv' y 'test_dataset.csv' generados en la carpeta 'output'.")
+    print("Archivos 'train_dataset.csv', 'test_dataset.csv' generados en la carpeta 'output'.")
 
 pregunta_01()
